@@ -3,7 +3,6 @@ package it.forcina.co2_tracking_core.persistence.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import it.forcina.co2_tracking_core.common.Role;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,12 +12,12 @@ import java.util.Collection;
 import java.util.Set;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {
 
-    private String id;
+    private Long id;
+    private String fullName;
     private String username;
     private String email;
     private String password;
