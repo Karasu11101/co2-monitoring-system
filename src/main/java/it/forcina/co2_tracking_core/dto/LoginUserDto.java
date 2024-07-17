@@ -1,6 +1,6 @@
 package it.forcina.co2_tracking_core.dto;
 
-import it.forcina.co2_tracking_core.common.Role;
+import it.forcina.co2_tracking_core.persistence.entity.Role;
 import lombok.Getter;
 import lombok.Setter;
 

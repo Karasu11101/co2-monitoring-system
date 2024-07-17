@@ -1,5 +1,11 @@
 DROP TABLE IF EXISTS authorities;
+DROP TABLE IF EXISTS co2_reading;
+DROP TABLE IF EXISTS sensor;
+DROP TABLE IF EXISTS district;
+DROP TABLE IF EXISTS city;
 DROP TABLE IF EXISTS user_data;
+
+
 
 CREATE TABLE IF NOT EXISTS user_data (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -14,4 +20,33 @@ CREATE TABLE IF NOT EXISTS authorities (
     id_user_fk BIGINT NOT NULL,
     PRIMARY KEY(role, id_user_fk),
     FOREIGN KEY (id_user_fk) REFERENCES user_data(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS city (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS district (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    id_city_fk BIGINT NOT NULL,
+    FOREIGN KEY (id_city_fk) REFERENCES city(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS sensor (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    id_district_fk BIGINT NOT NULL,
+    FOREIGN KEY (id_district_fk) REFERENCES district(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS co2_reading (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id_sensor_fk BIGINT NOT NULL,
+    username_fk VARCHAR NOT NULL,
+    ppm FLOAT NOT NULL,
+    record_date TIMESTAMP NOT NULL,
+    FOREIGN KEY (id_sensor_fk) REFERENCES sensor(id) ON DELETE CASCADE,
+    FOREIGN KEY (username_fk) REFERENCES user_data(username) ON DELETE CASCADE
 );

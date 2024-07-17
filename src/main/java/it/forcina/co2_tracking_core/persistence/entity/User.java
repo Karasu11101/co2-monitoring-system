@@ -1,14 +1,15 @@
 package it.forcina.co2_tracking_core.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import it.forcina.co2_tracking_core.common.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -25,7 +26,11 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        Set<SimpleGrantedAuthority> roles = new HashSet<>();
+        for(Role r : authorities) {
+            roles.add(new SimpleGrantedAuthority(r.getRole()));
+        }
+        return roles;
     }
 
     @Override

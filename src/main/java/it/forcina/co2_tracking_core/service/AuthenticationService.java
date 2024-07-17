@@ -1,6 +1,5 @@
 package it.forcina.co2_tracking_core.service;
 
-import it.forcina.co2_tracking_core.common.Role;
 import it.forcina.co2_tracking_core.dto.LoginUserDto;
 import it.forcina.co2_tracking_core.dto.RegisteredUserDto;
 import it.forcina.co2_tracking_core.persistence.entity.User;
@@ -36,9 +35,8 @@ public class AuthenticationService {
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        user.setAuthorities(dto.getRoles().stream().map(Role::valueOf).collect(Collectors.toSet()));
+        user.setAuthorities(dto.getRoles());
 
-//        mapper.insertNewUser(user.getFullName(), user.getUsername(), user.getEmail(), user.getPassword());
         mapper.insertNewUser(user);
         for(GrantedAuthority auth : user.getAuthorities()) {
             mapper.insertUserRole(auth.getAuthority(), user.getId());
@@ -52,7 +50,7 @@ public class AuthenticationService {
                 new UsernamePasswordAuthenticationToken(
                         dto.getUsername(),
                         dto.getPassword(),
-                        dto.getRoles().stream().map(r -> new SimpleGrantedAuthority(r.getValue()))
+                        dto.getRoles().stream().map(r -> new SimpleGrantedAuthority(r.getRole()))
                                 .collect(Collectors.toSet())
                 )
         );
