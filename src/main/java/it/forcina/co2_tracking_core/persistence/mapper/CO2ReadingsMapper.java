@@ -1,10 +1,13 @@
 package it.forcina.co2_tracking_core.persistence.mapper;
 
+import it.forcina.co2_tracking_core.persistence.entity.CO2Reading;
 import it.forcina.co2_tracking_core.persistence.entity.City;
 import it.forcina.co2_tracking_core.persistence.entity.District;
 import it.forcina.co2_tracking_core.persistence.entity.Sensor;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.One;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
@@ -28,7 +31,7 @@ public interface CO2ReadingsMapper {
             @Result(property = "city", column = "city_id",
                     one = @One(select = "getCityById", fetchType = FetchType.LAZY))
     })
-    @Select("SELECT r.id as id, r.ppm as ppm, r.record_date as record_date, s.name as sensor_name, " +
+    @Select("SELECT r.id as recording_id, r.ppm as ppm_concentration, r.record_date as record_date, s.name as sensor_name, " +
             "d.id as district_id, d.name as district_name, c.id as city_id, c.name as city_name " +
             "FROM co2_reading r " +
             "INNER JOIN sensor s ON r.id_sensor_fk = s.id " +
@@ -53,4 +56,8 @@ public interface CO2ReadingsMapper {
             "FROM city c " +
             "WHERE c.id = #{cityId}")
     City getCityById(@Param("cityId") Long city);
+
+    @Insert("INSERT INTO co2_reading (ppm, record_date, id_sensor_fk) VALUES (#{ppm}, #{recordDate}, #{sensor.id}")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    int insertRecording(CO2Reading recording);
 }

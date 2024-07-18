@@ -1,5 +1,6 @@
 package it.forcina.co2_tracking_core.controller;
 
+import it.forcina.co2_tracking_core.dto.response.Response;
 import it.forcina.co2_tracking_core.persistence.entity.User;
 import it.forcina.co2_tracking_core.service.CO2ReadingsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +29,11 @@ public class CO2ReadingsController {
 
     @GetMapping(value = "/sensor", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-    public ResponseEntity<List<Map<String,Object>>> getAllReadingsBySensorId(@RequestParam("sensorId") Long sensorId,
-                                                                             Authentication authentication) {
+    public ResponseEntity<Response> getAllReadingsBySensorId(@RequestParam("sensorId") Long sensorId,
+                                                                                       Authentication authentication) {
         User username = (User) authentication.getPrincipal();
         return ResponseEntity.status(HttpStatus.OK)
-                .body(readingsService.getAllReadingsBySensorId(sensorId, username.getUsername()));
+                .body(new Response.Builder<>().message("Readings successfully retrieved")
+                        .info(readingsService.getAllReadingsBySensorId(sensorId, username.getUsername())).build());
     }
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class CO2Readings {
+public class CO2Reading {
     private Long id;
     private Sensor sensor;
     private User user;
