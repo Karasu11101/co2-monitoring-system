@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class DistrictException extends Exception {
-    private String errorCode;
+    private final String errorCode;
 
     public DistrictException(String message, String errorCode) {
         super(message);

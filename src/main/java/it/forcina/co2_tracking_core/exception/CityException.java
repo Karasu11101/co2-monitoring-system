@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class CityException extends Exception {
-    private String errorCode;
+    private final String errorCode;
 
     public CityException(String message, String errorCode) {
         super(message);

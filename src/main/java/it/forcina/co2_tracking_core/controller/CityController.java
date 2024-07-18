@@ -1,6 +1,6 @@
 package it.forcina.co2_tracking_core.controller;
 
-import it.forcina.co2_tracking_core.dto.CityDistrictDto;
+import it.forcina.co2_tracking_core.dto.CityDto;
 import it.forcina.co2_tracking_core.dto.response.Response;
 import it.forcina.co2_tracking_core.exception.CityException;
 import it.forcina.co2_tracking_core.persistence.entity.City;
@@ -30,18 +30,18 @@ public class CityController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Response> insertCity(@RequestBody CityDistrictDto dto) throws CityException {
+    public ResponseEntity<Response<String>> insertCity(@RequestBody CityDto dto) throws CityException {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new Response.Builder<String>()
                         .message("New city created successfully")
-                        .info(String.format("City ID: {%d}", cityService.insertCity(dto.getCity())))
+                        .info(String.format("City ID: {%d}", cityService.insertCity(dto)))
                         .build()
         );
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-    public ResponseEntity<Response> getAllCities() {
+    public ResponseEntity<Response<List<City>>> getAllCities() throws CityException {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new Response.Builder<List<City>>()
                         .message("Cities successfully retrieved")
@@ -49,4 +49,6 @@ public class CityController {
                         .build()
         );
     }
+
+
 }

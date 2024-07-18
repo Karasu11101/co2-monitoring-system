@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Options;
 
 @Mapper
 public interface SensorMapper {
-    @Insert("INSERT INTO sensor (id_district_fk) VALUES (#{district.id})")
+    @Insert("INSERT INTO sensor (name, id_district_fk) VALUES (#{name}, #{district.id})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertSensor(Sensor sensor);
 }

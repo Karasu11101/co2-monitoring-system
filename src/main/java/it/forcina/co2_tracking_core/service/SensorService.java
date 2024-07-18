@@ -1,5 +1,6 @@
 package it.forcina.co2_tracking_core.service;
 
+import it.forcina.co2_tracking_core.dto.response.Codes;
 import it.forcina.co2_tracking_core.exception.SensorException;
 import it.forcina.co2_tracking_core.persistence.entity.Sensor;
 import it.forcina.co2_tracking_core.persistence.mapper.SensorMapper;
@@ -21,6 +22,6 @@ public class SensorService {
         if(sensor != null) {
             return sensorMapper.insertSensor(sensor);
         }
-        throw new SensorException("Invalid argument: sensor must not be null", "ERROR_CODE 001");
+        throw new SensorException("Invalid argument: sensor must not be null", Codes.INVALID_ARGUMENT.getLabel());
     }
 }

@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class CO2ReadingException extends Exception {
-    private String errorCode;
+    private final String errorCode;
 
     public CO2ReadingException(String message, String errorCode) {
         super(message);

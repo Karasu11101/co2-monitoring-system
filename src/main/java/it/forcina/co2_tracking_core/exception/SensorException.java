@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class SensorException extends Exception {
-    private String errorCode;
+    private final String errorCode;
 
     public SensorException(String message, String errorCode) {
         super(message);
