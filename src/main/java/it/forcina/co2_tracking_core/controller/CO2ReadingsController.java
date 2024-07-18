@@ -27,7 +27,7 @@ public class CO2ReadingsController {
     }
 
     @GetMapping(value = "/sensor", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<List<Map<String,Object>>> getAllReadingsBySensorId(@RequestParam("sensorId") Long sensorId,
                                                                              Authentication authentication) {
         User username = (User) authentication.getPrincipal();

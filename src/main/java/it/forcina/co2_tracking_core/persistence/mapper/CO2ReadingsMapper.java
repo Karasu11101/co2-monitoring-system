@@ -28,10 +28,8 @@ public interface CO2ReadingsMapper {
             @Result(property = "city", column = "city_id",
                     one = @One(select = "getCityById", fetchType = FetchType.LAZY))
     })
-    @Select("SELECT r.id as id, r.ppm as ppm, r.record_date as recordDate, " +
-            "s.id as sensor_id, " +
-            "d.id as district_id, d.name as district_name, " +
-            "c.id as city_id, c.name as city_name " +
+    @Select("SELECT r.id as id, r.ppm as ppm, r.record_date as record_date, s.name as sensor_name, " +
+            "d.id as district_id, d.name as district_name, c.id as city_id, c.name as city_name " +
             "FROM co2_reading r " +
             "INNER JOIN sensor s ON r.id_sensor_fk = s.id " +
             "INNER JOIN district d ON s.id_district_fk = d.id " +
@@ -41,7 +39,7 @@ public interface CO2ReadingsMapper {
             "AND r.username_fk = #{username}")
     List<Map<String, Object>> getCO2ReadingsBySensorId(@Param("sensorId") Long sensorId, @Param("username") String username);
 
-    @Select("SELECT s.id as sensor_id " +
+    @Select("SELECT s.name as sensor_name " +
             "FROM sensor s " +
             "WHERE s.id = #{sensorId}")
     Sensor getSensorById(@Param("sensorId") Long sensorId);
