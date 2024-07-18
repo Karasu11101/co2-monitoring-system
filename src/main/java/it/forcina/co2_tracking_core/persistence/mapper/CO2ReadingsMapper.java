@@ -106,4 +106,7 @@ public interface CO2ReadingsMapper {
     @Insert("INSERT INTO co2_reading (ppm, record_date, id_sensor_fk, username_fk) VALUES (#{ppm}, #{recordDate}, #{sensor.id}, #{user.username})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertRecording(CO2Reading recording);
+
+    @Select("SELECT COUNT(*) FROM sensor WHERE id = #{sensorId}")
+    int checkSensorExists(@Param("sensorId") Long sensorId);
 }

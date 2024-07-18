@@ -27,10 +27,10 @@ public class CO2ReadingsService {
     }
 
     @Transactional(readOnly = true)
-    public List<Map<String,Object>> getAllReadingsBySensorId(Long sensorId, String username) throws CO2ReadingException {
-        if((sensorId != null && sensorId > 0) && (!username.isEmpty() && !username.isBlank())) {
+    public List<Map<String, Object>> getAllReadingsBySensorId(Long sensorId, String username) throws CO2ReadingException {
+        if ((sensorId != null && sensorId > 0) && (!username.isEmpty() && !username.isBlank())) {
             List<Map<String, Object>> readings = mapper.getAllCO2ReadingsBySensorId(sensorId, username);
-            if(!readings.isEmpty()) {
+            if (!readings.isEmpty()) {
                 return readings;
             }
             throw new CO2ReadingException("No readings were found", Codes.NO_RESOURCE_FOUND.getLabel());
@@ -39,10 +39,10 @@ public class CO2ReadingsService {
     }
 
     @Transactional(readOnly = true)
-    public List<Map<String,Object>> getAllReadingsByCityId(Long cityId, String username) throws CO2ReadingException {
-        if((cityId != null && cityId > 0) && (!username.isEmpty() && !username.isBlank())) {
+    public List<Map<String, Object>> getAllReadingsByCityId(Long cityId, String username) throws CO2ReadingException {
+        if ((cityId != null && cityId > 0) && (!username.isEmpty() && !username.isBlank())) {
             List<Map<String, Object>> readings = mapper.getAllCO2ReadingsByCityId(cityId, username);
-            if(!readings.isEmpty()) {
+            if (!readings.isEmpty()) {
                 return readings;
             }
             throw new CO2ReadingException("No readings were foung", Codes.NO_RESOURCE_FOUND.getLabel());
@@ -51,10 +51,10 @@ public class CO2ReadingsService {
     }
 
     @Transactional(readOnly = true)
-    public List<Map<String,Object>> getAllReadingsByDistrictId(Long districtId, String username) throws CO2ReadingException {
-        if((districtId != null && districtId > 0) && (!username.isEmpty() && !username.isBlank())) {
+    public List<Map<String, Object>> getAllReadingsByDistrictId(Long districtId, String username) throws CO2ReadingException {
+        if ((districtId != null && districtId > 0) && (!username.isEmpty() && !username.isBlank())) {
             List<Map<String, Object>> readings = mapper.getAllCO2ReadingsByDistrictId(districtId, username);
-            if(!readings.isEmpty()) {
+            if (!readings.isEmpty()) {
                 return readings;
             }
             throw new CO2ReadingException("No readings were found", Codes.NO_RESOURCE_FOUND.getLabel());
@@ -64,6 +64,17 @@ public class CO2ReadingsService {
 
     @Transactional
     public long insertRecording(CO2ReadingDto co2ReadingDto, User user) throws CO2ReadingException {
+        if (co2ReadingDto == null) {
+            throw new CO2ReadingException(
+                    "Invalid argument: CO2 readings must not be null",
+                    Codes.INVALID_ARGUMENT.getLabel()
+            );
+        }
+        if(mapper.checkSensorExists(co2ReadingDto.sensorId()) < 0) {
+            throw new CO2ReadingException(
+                    String.format("Cannot insert record: sensor with ID {%d} does not exist", co2ReadingDto.sensorId()),
+                    Codes.NO_RESOURCE_FOUND.getLabel());
+        }
         CO2Reading co2Reading = CO2Reading.builder()
                 .sensor(new Sensor(
                         co2ReadingDto.sensorId(),
@@ -79,13 +90,11 @@ public class CO2ReadingsService {
                 .user(user)
                 .build();
 
-        if(co2Reading != null) {
-            int response = mapper.insertRecording(co2Reading);
-            if(response == 1) {
-                return co2Reading.getId();
-            }
-            throw new CO2ReadingException("Insert was not successful", Codes.OPERATION_UNSUCCESSFUL.getLabel());
+        int response = mapper.insertRecording(co2Reading);
+        if (response == 1) {
+            return co2Reading.getId();
         }
-        throw new CO2ReadingException("Invalid argument: CO2 readings must not be null", Codes.INVALID_ARGUMENT.getLabel());
+        throw new CO2ReadingException("Insert was not successful", Codes.OPERATION_UNSUCCESSFUL.getLabel());
     }
 }
+
