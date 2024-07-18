@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +16,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
 public class User implements UserDetails {
 
     private Long id;
@@ -22,15 +24,15 @@ public class User implements UserDetails {
     private String username;
     private String email;
     private String password;
-    private Set<Role> authorities;
+    private Set<Role> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<SimpleGrantedAuthority> roles = new HashSet<>();
-        for(Role r : authorities) {
-            roles.add(new SimpleGrantedAuthority(r.getRole()));
+        Set<SimpleGrantedAuthority> role = new HashSet<>();
+        for(Role r : roles) {
+            role.add(new SimpleGrantedAuthority(r.getRole()));
         }
-        return roles;
+        return role;
     }
 
     @Override

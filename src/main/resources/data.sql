@@ -14,12 +14,12 @@ VALUES
 
 INSERT INTO district (name, id_city_fk)
 VALUES
-    ('Gràcia', 1); -- assuming city.id = 1 for Barcelona
+    ('Gràcia', 1);
 
 
 INSERT INTO sensor (name, id_district_fk)
 VALUES
-    ('Gràcia sensor n.001', 1); -- assuming district.id = 1 for Gràcia
+    ('Gràcia sensor n.001', 1);
 
 
 INSERT INTO co2_reading (id_sensor_fk, username_fk, ppm, record_date)
