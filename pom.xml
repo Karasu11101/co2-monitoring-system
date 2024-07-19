@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>it.forcina</groupId>
 	<artifactId>co2-tracking-core</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>co2-tracking</name>
 
 	<properties>
