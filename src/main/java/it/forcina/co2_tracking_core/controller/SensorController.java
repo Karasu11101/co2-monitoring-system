@@ -10,10 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -46,6 +49,28 @@ public class SensorController {
                 new Response.Builder<String>()
                         .message("New sensor successfully created")
                         .info(String.format("Sensor ID: {%d}", sensorService.insertSensor(dto)))
+                        .build()
+        );
+    }
+
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Response<Integer>> updateSensor(@RequestBody SensorDto dto, @RequestParam("id") Long id) throws SensorException {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new Response.Builder<Integer>()
+                        .message("Sensor successfully updated")
+                        .info(sensorService.updateSensor(dto, id))
+                        .build()
+        );
+    }
+
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Response<Integer>> deleteSensor(@RequestParam("id") Long id) throws SensorException {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(
+                new Response.Builder<Integer>()
+                        .message("Sensor successfully deleted")
+                        .info(sensorService.deleteSensor(id))
                         .build()
         );
     }

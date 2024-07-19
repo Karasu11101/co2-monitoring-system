@@ -52,4 +52,44 @@ public class SensorService {
         }
         throw new SensorException("Insert was not successful", Codes.OPERATION_UNSUCCESSFUL.getLabel());
     }
+
+    @Transactional
+    public int updateSensor(SensorDto dto, Long id) throws SensorException {
+        if(dto == null || dto.name().isBlank() || dto.name().isEmpty() || id == null || id < 0) {
+            throw new SensorException(
+                    "Invalid argument: sensor name must not be null, and ID must be a positive number",
+                    Codes.INVALID_ARGUMENT.getLabel()
+            );
+        }
+        if(checkExistsMapper.checkSensorExists(id) < 0) {
+            throw new SensorException(
+                    String.format("Cannot update record: sensor with ID {%d} does not exist", id),
+                    Codes.NO_RESOURCE_FOUND.getLabel());
+        }
+        int response = sensorMapper.updateSensor(dto.name(), id);
+        if(response == 1) {
+            return response;
+        }
+        throw new SensorException("Update was not successful", Codes.OPERATION_UNSUCCESSFUL.getLabel());
+    }
+
+    @Transactional
+    public int deleteSensor(Long id) throws SensorException {
+        if(id == null || id < 0) {
+            throw new SensorException(
+                    "Invalid argument: ID must not be null and must be a positive number",
+                    Codes.INVALID_ARGUMENT.getLabel()
+            );
+        }
+        if(checkExistsMapper.checkSensorExists(id) < 0) {
+            throw new SensorException(
+                    String.format("Cannot delete record: sensor with ID {%d} does not exist", id),
+                    Codes.NO_RESOURCE_FOUND.getLabel());
+        }
+        int response = sensorMapper.deleteSensor(id);
+        if(response == 1) {
+            return response;
+        }
+        throw new SensorException("Could not delete record", Codes.OPERATION_UNSUCCESSFUL.getLabel());
+    }
 }

@@ -77,7 +77,7 @@ public class DistrictService {
     }
 
     @Transactional
-    public int delete(Long id) throws DistrictException {
+    public int deleteDistrict(Long id) throws DistrictException {
         if(id == null || id < 0) {
             throw new DistrictException(
                     "Invalid argument: ID must not be null and must be a positive number",

@@ -14,4 +14,7 @@ public interface CheckExistsMapper {
 
     @Select("SELECT COUNT(*) FROM district WHERE id = #{districtId}")
     int checkDistrictExists(@Param("districtId") Long districtId);
+
+    @Select("SELECT COUNT(*) FROM co2_reading WHERE id = #{readingId}")
+    int checkReadingExists(@Param("readingId") Long readingId);
 }

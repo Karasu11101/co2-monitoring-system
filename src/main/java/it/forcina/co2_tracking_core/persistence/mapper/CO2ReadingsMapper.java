@@ -4,6 +4,7 @@ import it.forcina.co2_tracking_core.persistence.entity.CO2Reading;
 import it.forcina.co2_tracking_core.persistence.entity.City;
 import it.forcina.co2_tracking_core.persistence.entity.District;
 import it.forcina.co2_tracking_core.persistence.entity.Sensor;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.One;
@@ -12,8 +13,10 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.mapping.FetchType;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -106,4 +109,10 @@ public interface CO2ReadingsMapper {
     @Insert("INSERT INTO co2_reading (ppm, record_date, id_sensor_fk, username_fk) VALUES (#{ppm}, #{recordDate}, #{sensorId}, #{username})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertRecording(CO2Reading recording);
+
+    @Update("UPDATE co2_reading SET ppm = #{ppm}, record_date = #{recordDate} WHERE id = #{id}")
+    int updateReading(@Param("ppm") float ppm, @Param("recordDate") ZonedDateTime recordDate, @Param("id") long id);
+
+    @Delete("DELETE FROM co2_reading WHERE id = #{id}")
+    int deleteReading(@Param("id") long id);
 }

@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
+import static java.time.ZonedDateTime.now;
+
 @Service
 public class CO2ReadingsService {
 
@@ -87,6 +89,47 @@ public class CO2ReadingsService {
             return co2Reading.getId();
         }
         throw new CO2ReadingException("Insert was not successful", Codes.OPERATION_UNSUCCESSFUL.getLabel());
+    }
+
+    @Transactional
+    public int updateReading(CO2ReadingDto dto, Long id) throws CO2ReadingException {
+        if(dto == null || dto.recordDate().isAfter(now()) || dto.ppm() < 0 || id == null || id < 0) {
+            throw new CO2ReadingException(
+                    "Invalid argument: CO2 reading must not be null, record date must not be a future date, " +
+                            "ppm levels must not be negative, and ID must be a positive number",
+                    Codes.INVALID_ARGUMENT.getLabel()
+            );
+        }
+        if(checkExistsMapper.checkReadingExists(id) < 0) {
+            throw new CO2ReadingException(
+                    String.format("Cannot update record: reading with ID {%d} does not exist", id),
+                    Codes.NO_RESOURCE_FOUND.getLabel());
+        }
+        int response = mapper.updateReading(dto.ppm(), dto.recordDate(), id);
+        if(response == 1) {
+            return response;
+        }
+        throw new CO2ReadingException("Update was not successful", Codes.OPERATION_UNSUCCESSFUL.getLabel());
+    }
+
+    @Transactional
+    public int deleteReading(Long id) throws CO2ReadingException {
+        if(id == null || id < 0) {
+            throw new CO2ReadingException(
+                    "Invalid argument: ID must not be null and must be a positive number",
+                    Codes.INVALID_ARGUMENT.getLabel()
+            );
+        }
+        if(checkExistsMapper.checkReadingExists(id) < 0) {
+            throw new CO2ReadingException(
+                    String.format("Cannot delete record: reading with ID {%d} does not exist", id),
+                    Codes.NO_RESOURCE_FOUND.getLabel());
+        }
+        int response = mapper.deleteReading(id);
+        if(response == 1) {
+            return response;
+        }
+        throw new CO2ReadingException("Could not delete record", Codes.OPERATION_UNSUCCESSFUL.getLabel());
     }
 }
 

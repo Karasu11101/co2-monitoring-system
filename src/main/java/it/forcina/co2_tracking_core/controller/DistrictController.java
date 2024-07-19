@@ -70,7 +70,7 @@ public class DistrictController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(
                 new Response.Builder<Integer>()
                         .message("District successfully deleted")
-                        .info(districtService.delete(id))
+                        .info(districtService.deleteDistrict(id))
                         .build()
         );
     }
