@@ -10,5 +10,5 @@ import lombok.Data;
 public class District {
     private Long id;
     private String name;
-    private City city;
+    private Long cityId;
 }

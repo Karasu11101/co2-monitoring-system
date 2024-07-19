@@ -4,9 +4,6 @@ import it.forcina.co2_tracking_core.dto.CO2ReadingDto;
 import it.forcina.co2_tracking_core.dto.response.Codes;
 import it.forcina.co2_tracking_core.exception.CO2ReadingException;
 import it.forcina.co2_tracking_core.persistence.entity.CO2Reading;
-import it.forcina.co2_tracking_core.persistence.entity.City;
-import it.forcina.co2_tracking_core.persistence.entity.District;
-import it.forcina.co2_tracking_core.persistence.entity.Sensor;
 import it.forcina.co2_tracking_core.persistence.entity.User;
 import it.forcina.co2_tracking_core.persistence.mapper.CO2ReadingsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,18 +73,10 @@ public class CO2ReadingsService {
                     Codes.NO_RESOURCE_FOUND.getLabel());
         }
         CO2Reading co2Reading = CO2Reading.builder()
-                .sensor(new Sensor(
-                        co2ReadingDto.sensorId(),
-                        co2ReadingDto.sensorName(),
-                        new District(
-                                co2ReadingDto.districtId(),
-                                co2ReadingDto.districtName(),
-                                new City(
-                                        co2ReadingDto.cityId(),
-                                        co2ReadingDto.cityName()))))
+                .sensorId(co2ReadingDto.sensorId())
                 .ppm(co2ReadingDto.ppm())
                 .recordDate(co2ReadingDto.recordDate())
-                .user(user)
+                .username(user.getUsername())
                 .build();
 
         int response = mapper.insertRecording(co2Reading);

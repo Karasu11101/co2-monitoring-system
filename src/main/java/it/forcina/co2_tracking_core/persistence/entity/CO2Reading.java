@@ -9,8 +9,8 @@ import java.time.ZonedDateTime;
 @Builder
 public class CO2Reading {
     private Long id;
-    private Sensor sensor;
-    private User user;
+    private Long sensorId;
+    private String username;
     private float ppm;
     private ZonedDateTime recordDate;
 }

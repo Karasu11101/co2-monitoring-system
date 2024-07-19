@@ -103,7 +103,7 @@ public interface CO2ReadingsMapper {
             "WHERE c.id = #{cityId}")
     City getCityById(@Param("cityId") Long city);
 
-    @Insert("INSERT INTO co2_reading (ppm, record_date, id_sensor_fk, username_fk) VALUES (#{ppm}, #{recordDate}, #{sensor.id}, #{user.username})")
+    @Insert("INSERT INTO co2_reading (ppm, record_date, id_sensor_fk, username_fk) VALUES (#{ppm}, #{recordDate}, #{sensorId}, #{username})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertRecording(CO2Reading recording);
 

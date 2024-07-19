@@ -10,5 +10,5 @@ import lombok.Data;
 public class Sensor {
     private Long id;
     private String name;
-    private District district;
+    private Long districtId;
 }

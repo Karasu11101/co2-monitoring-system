@@ -3,8 +3,6 @@ package it.forcina.co2_tracking_core.service;
 import it.forcina.co2_tracking_core.dto.SensorDto;
 import it.forcina.co2_tracking_core.dto.response.Codes;
 import it.forcina.co2_tracking_core.exception.SensorException;
-import it.forcina.co2_tracking_core.persistence.entity.City;
-import it.forcina.co2_tracking_core.persistence.entity.District;
 import it.forcina.co2_tracking_core.persistence.entity.Sensor;
 import it.forcina.co2_tracking_core.persistence.mapper.SensorMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,12 +41,7 @@ public class SensorService {
         }
         Sensor sensor = Sensor.builder()
                 .name(sensorDto.name())
-                .district(new District(
-                        sensorDto.districtId(),
-                        sensorDto.districtName(),
-                        new City(
-                                sensorDto.cityId(),
-                                sensorDto.cityName())))
+                .districtId(sensorDto.districtId())
                 .build();
         int response = sensorMapper.insertSensor(sensor);
         if(response == 1) {

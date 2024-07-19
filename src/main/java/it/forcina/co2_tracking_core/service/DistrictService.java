@@ -2,9 +2,7 @@ package it.forcina.co2_tracking_core.service;
 
 import it.forcina.co2_tracking_core.dto.DistrictDto;
 import it.forcina.co2_tracking_core.dto.response.Codes;
-import it.forcina.co2_tracking_core.exception.CO2ReadingException;
 import it.forcina.co2_tracking_core.exception.DistrictException;
-import it.forcina.co2_tracking_core.persistence.entity.City;
 import it.forcina.co2_tracking_core.persistence.entity.District;
 import it.forcina.co2_tracking_core.persistence.mapper.DistrictMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +44,7 @@ public class DistrictService {
         }
         District district = District.builder()
                 .name(districtDto.name())
-                .city(City.builder()
-                        .id(districtDto.cityId())
-                        .name(districtDto.cityName())
-                        .build())
+                .cityId(districtDto.cityId())
                 .build();
         int response = districtMapper.insertDistrict(district);
         if(response == 1) {

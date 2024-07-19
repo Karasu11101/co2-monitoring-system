@@ -13,24 +13,18 @@ import java.util.List;
 
 @Mapper
 public interface DistrictMapper {
-    @Insert("INSERT INTO district (name, id_city_fk) VALUES (#{name}, #{city.id})")
+    @Insert("INSERT INTO district (name, id_city_fk) VALUES (#{name}, #{cityId})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertDistrict(District district);
 
     @Select("SELECT COUNT(*) FROM city WHERE id = #{cityId}")
     int checkCityExists(@Param("cityId") Long cityId);
 
-//    @Select("SELECT * FROM district")
-//    List<District> getAllDistricts();
-
-    @Select("SELECT d.id AS district_id, d.name AS district_name, d.id_city_fk, c.id AS city_id, c.name AS city_name " +
-            "FROM district d " +
-            "JOIN city c ON d.id_city_fk = c.id")
+    @Select("SELECT id, name, id_city_fk FROM district")
     @Results(value = {
-            @Result(property = "id", column = "district_id"),
-            @Result(property = "name", column = "district_name"),
-            @Result(property = "city.id", column = "city_id"),
-            @Result(property = "city.name", column = "city_name")
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "cityId", column = "id_city_fk")
     })
     List<District> getAllDistricts();
 }
