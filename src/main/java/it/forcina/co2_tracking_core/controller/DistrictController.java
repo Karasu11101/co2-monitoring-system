@@ -10,10 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -46,6 +49,28 @@ public class DistrictController {
                 new Response.Builder<List<District>>()
                         .message("Districts successfully retrieved")
                         .info(districtService.getAllDistricts())
+                        .build()
+        );
+    }
+
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Response<Integer>> updateDistrict(@RequestBody DistrictDto dto, @RequestParam("id") Long id) throws DistrictException {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new Response.Builder<Integer>()
+                        .message("District successfully updated")
+                        .info(districtService.updateDistrict(dto, id))
+                        .build()
+        );
+    }
+
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Response<Integer>> deleteDistrict(@RequestParam("id") Long id) throws DistrictException {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(
+                new Response.Builder<Integer>()
+                        .message("District successfully deleted")
+                        .info(districtService.delete(id))
                         .build()
         );
     }

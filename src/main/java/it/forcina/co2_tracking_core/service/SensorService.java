@@ -4,6 +4,7 @@ import it.forcina.co2_tracking_core.dto.SensorDto;
 import it.forcina.co2_tracking_core.dto.response.Codes;
 import it.forcina.co2_tracking_core.exception.SensorException;
 import it.forcina.co2_tracking_core.persistence.entity.Sensor;
+import it.forcina.co2_tracking_core.persistence.mapper.CheckExistsMapper;
 import it.forcina.co2_tracking_core.persistence.mapper.SensorMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,12 @@ import java.util.List;
 @Service
 public class SensorService {
     private final SensorMapper sensorMapper;
+    private final CheckExistsMapper checkExistsMapper;
 
     @Autowired
-    public SensorService(SensorMapper sensorMapper) {
+    public SensorService(SensorMapper sensorMapper, CheckExistsMapper checkExistsMapper) {
         this.sensorMapper = sensorMapper;
+        this.checkExistsMapper = checkExistsMapper;
     }
 
     @Transactional(readOnly = true)
@@ -34,7 +37,7 @@ public class SensorService {
         if(sensorDto == null) {
             throw new SensorException("Invalid argument: sensor must not be null", Codes.INVALID_ARGUMENT.getLabel());
         }
-        if(sensorMapper.checkDistrictExists(sensorDto.districtId()) < 0) {
+        if(checkExistsMapper.checkDistrictExists(sensorDto.districtId()) < 0) {
             throw new SensorException(
                     String.format("Cannot insert record: district with ID {%d} does not exist", sensorDto.districtId()),
                     Codes.NO_RESOURCE_FOUND.getLabel());

@@ -4,7 +4,6 @@ import it.forcina.co2_tracking_core.persistence.entity.Sensor;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
@@ -17,9 +16,6 @@ public interface SensorMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertSensor(Sensor sensor);
 
-    @Select("SELECT COUNT(*) FROM district WHERE id = #{districtId}")
-    int checkDistrictExists(@Param("districtId") Long districtId);
-
     @Select("SELECT id, name, id_district_fk FROM sensor")
     @Results(value = {
             @Result(property = "id", column = "id"),
@@ -27,4 +23,6 @@ public interface SensorMapper {
             @Result(property = "districtId", column = "id_district_fk")
     })
     List<Sensor> getAllSensors();
+
+
 }

@@ -6,6 +6,7 @@ import it.forcina.co2_tracking_core.exception.CO2ReadingException;
 import it.forcina.co2_tracking_core.persistence.entity.CO2Reading;
 import it.forcina.co2_tracking_core.persistence.entity.User;
 import it.forcina.co2_tracking_core.persistence.mapper.CO2ReadingsMapper;
+import it.forcina.co2_tracking_core.persistence.mapper.CheckExistsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,10 +18,12 @@ import java.util.Map;
 public class CO2ReadingsService {
 
     private final CO2ReadingsMapper mapper;
+    private final CheckExistsMapper checkExistsMapper;
 
     @Autowired
-    public CO2ReadingsService(CO2ReadingsMapper mapper) {
+    public CO2ReadingsService(CO2ReadingsMapper mapper, CheckExistsMapper checkExistsMapper) {
         this.mapper = mapper;
+        this.checkExistsMapper = checkExistsMapper;
     }
 
     @Transactional(readOnly = true)
@@ -67,7 +70,7 @@ public class CO2ReadingsService {
                     Codes.INVALID_ARGUMENT.getLabel()
             );
         }
-        if(mapper.checkSensorExists(co2ReadingDto.sensorId()) < 0) {
+        if(checkExistsMapper.checkSensorExists(co2ReadingDto.sensorId()) < 0) {
             throw new CO2ReadingException(
                     String.format("Cannot insert record: sensor with ID {%d} does not exist", co2ReadingDto.sensorId()),
                     Codes.NO_RESOURCE_FOUND.getLabel());
